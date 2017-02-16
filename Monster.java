@@ -40,6 +40,7 @@ class Monster {
         if (curLife <= 0) {
             dead(hunter);
         }
+        kill(hunter);
         info();
     }
 
@@ -55,14 +56,14 @@ class Monster {
     }
 
     public void dead(Hunter hunter) {
-        //让hunter增加经验值
-        hunter.expAdd(this);
         System.out.println(type + "已死亡");
         isLive = false;
+        //让hunter增加经验值
+        hunter.expAdd(this);
     }
 
     public void info() {
-        System.out.println("类别" + type + ",当前血量:" + curLife + ",最大生命值:" + maxLife + ",攻击力:"
+        System.out.println("类别:" + type + ",当前血量:" + curLife + ",最大生命值:" + maxLife + ",攻击力:"
                 + attack + ",防御:" + defend + ",是否存活:" + isLive);
     }
 }

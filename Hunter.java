@@ -65,5 +65,31 @@ class Hunter {
     public void expAdd(Monster monster) {
         exp += monster.maxLife;
         System.out.println(name + "当前经验值为:" + exp);
+        //1 判断是否升级
+        //1.1 获取升级的经验
+        //1级=1*50 2级=1*50+2*50+3*50
+        int needExp=0;
+        for (int i=1;i<=level;i++){
+            needExp+=i*50;
+        }
+
+        //1.2 判断当前经验是否大于升级所需经验
+        if (exp>=needExp){
+            //如果升级,则调用upGrade方法
+            upGrade();
+        }
+
+    }
+
+    //升级
+    public void upGrade(){
+        level+=1;
+        System.out.println(name+"升级了!");
+        //攻击力增加4 防御力增加3 maxLife增加20 curLife=maxLife
+        attack+=4;
+        defend+=3;
+        maxLife+=20;
+        curLife=maxLife;
+        info();
     }
 }
