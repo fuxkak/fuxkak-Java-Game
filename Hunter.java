@@ -10,7 +10,7 @@ class Hunter {
     int defend;
 
     //增加敏捷度和躲避几率
-    int agile;//敏捷度
+    int minJie;//敏捷度
     //闪躲最大几率
     int hideRate;
 
@@ -25,7 +25,7 @@ class Hunter {
         attack = 25;
         defend = 7;
         //为敏捷和闪躲赋值
-        agile = 10;
+        minJie = 10;
         hideRate = 60;
     }
 
@@ -40,13 +40,25 @@ class Hunter {
         monster.injured(this);
     }
 
-
-
-    //增加躲避的方法
-    public boolean hidden() {
-        return GameUtil.isHide(agile,hideRate);
+    //攻击吸血鬼的方法
+    public void fight(Vampire vampire) {
+        if (!isLive) {
+            return;
+        }
+        if (!vampire.isLive) {
+            return;
+        }
+        System.out.println(name + "挥舞着" + weapon + "杀向了" + vampire.type);
+        vampire.injured(this);
     }
 
+
+    //躲避的方法
+    public boolean hidden() {
+        return GameUtil.isHide(this.minJie, this.hideRate);//可以不要this
+    }
+
+    //monster的受伤方法
     public void injured(Monster monster) {
         //首先判断是否躲避成功,如果躲避成功则直接return,不会受伤
         if (hidden()) {
@@ -54,8 +66,33 @@ class Hunter {
             info();
             return;
         }
-        int p=curLife;
-       curLife-=GameUtil.lostLife(monster.attack,defend);
+
+        //获取丢失的生命值
+        int p = curLife;
+        int lostLife = GameUtil.calLostLife(monster.attack, defend);
+        curLife -= lostLife;
+        System.out.println(name + "受到了" + (p - curLife) + "点伤害");
+        info();
+        if (curLife <= 0) {
+            dead();
+        }
+    }
+
+    //vampire的受伤方法
+    public void injured(Vampire vampire) {
+        //首先判断是否躲避成功,如果躲避成功则直接return,不会受伤
+        if (hidden()) {
+            System.out.println(name + "躲避成功!!!!!!!!!!!!!!!!!!!!!!!");
+            info();
+            return;
+        }
+
+        //获取丢失的生命值
+        int p = curLife;
+        int lostLife = GameUtil.calLostLife(vampire.attack, defend);
+        //bloodSuck方法用来获取应该吸取的血量
+        vampire.bloodSuck(lostLife);
+        curLife -= lostLife;
         System.out.println(name + "受到了" + (p - curLife) + "点伤害");
         info();
         if (curLife <= 0) {
@@ -68,9 +105,25 @@ class Hunter {
         isLive = false;
     }
 
+    //增加经验值
     public void addExp(Monster monster) {
         exp += monster.maxLife;
         System.out.println(name + "获得了" + monster.maxLife + "点经验值");
+        //当前经验值>升级所需经验则升级
+        //exp>needExp
+        int needExp = 0;
+        for (int i = 1; i <= level; i++) {
+            needExp += i * 50;
+        }
+        if (exp >= needExp) {
+            levelUp();
+        }
+    }
+
+    //通过吸血鬼增加的经验值
+    public void addExp(Vampire vampire) {
+        exp += vampire.maxLife;
+        System.out.println(name + "获得了" + vampire.maxLife + "点经验值");
         //当前经验值>升级所需经验则升级
         //exp>needExp
         int needExp = 0;

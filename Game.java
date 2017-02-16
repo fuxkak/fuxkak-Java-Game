@@ -1,5 +1,6 @@
 public class Game {
     public static void main(String[] args) {
-        new GameControl(new Hunter("º®±ùÉäÊÖ", "¹­¼ı")).start();
+        //Hunter hunter = ;
+        new GameControl(new Hunter("å¾·ç›è¥¿äºš", "å¤§å®å‰‘")).start();
     }
 }
