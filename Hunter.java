@@ -10,7 +10,7 @@ class Hunter {
     int defend;
 
     //增加敏捷度和躲避几率
-    int minJie;//敏捷度
+    int agile;//敏捷度
     //闪躲最大几率
     int hideRate;
 
@@ -25,7 +25,7 @@ class Hunter {
         attack = 25;
         defend = 7;
         //为敏捷和闪躲赋值
-        minJie = 10;
+        agile = 10;
         hideRate = 60;
     }
 
@@ -41,9 +41,10 @@ class Hunter {
     }
 
 
-    //躲避的方法
+
+    //增加躲避的方法
     public boolean hidden() {
-        return GameUtil.isHide(this.minJie, this.hideRate);//可以不要this
+        return GameUtil.isHide(agile,hideRate);
     }
 
     public void injured(Monster monster) {
@@ -53,11 +54,8 @@ class Hunter {
             info();
             return;
         }
-
-        //获取丢失的生命值
-        int p = curLife;
-        int lostLife = GameUtil.calLostLife(monster.attack, defend);
-        curLife -= lostLife;
+        int p=curLife;
+       curLife-=GameUtil.lostLife(monster.attack,defend);
         System.out.println(name + "受到了" + (p - curLife) + "点伤害");
         info();
         if (curLife <= 0) {
