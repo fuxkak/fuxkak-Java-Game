@@ -10,7 +10,7 @@ class Hunter {
     int defend;
 
     //增加敏捷度和躲避几率
-    int agile;//敏捷度
+    int minJie;//敏捷度
     //闪躲最大几率
     int hideRate;
 
@@ -25,7 +25,7 @@ class Hunter {
         attack = 25;
         defend = 7;
         //为敏捷和闪躲赋值
-        agile = 10;
+        minJie = 10;
         hideRate = 60;
     }
 
@@ -40,25 +40,10 @@ class Hunter {
         monster.injured(this);
     }
 
-    //生成任意2个数之间的随机整数
-    public int randomRange(int start, int end) {
-        return ((int) (Math.random() * (end - start) + start));
-    }
 
-    //增加躲避的方法
+    //躲避的方法
     public boolean hidden() {
-        //1.生成一个成功躲避几率(和敏捷相关)
-        int successRate = agile * hideRate / 100;
-
-        //2.生成一个随机数来判断猎人是否躲避成功
-        int ran = randomRange(1, 101);
-
-        //3.判断是否躲避成功(如果随机数小于成功躲避几率,则躲避成功)
-        if (ran < successRate) {
-            return true;
-        } else {
-            return false;
-        }
+        return GameUtil.isHide(this.minJie, this.hideRate);//可以不要this
     }
 
     public void injured(Monster monster) {
@@ -69,15 +54,10 @@ class Hunter {
             return;
         }
 
+        //获取丢失的生命值
         int p = curLife;
-        int lostLife = monster.attack - defend;
-        int lostBasicLife = 7;
-
-        if (lostLife <= 0) {
-            curLife -= lostBasicLife;
-        } else {
-            curLife -= lostBasicLife + lostLife;
-        }
+        int lostLife = GameUtil.calLostLife(monster.attack, defend);
+        curLife -= lostLife;
         System.out.println(name + "受到了" + (p - curLife) + "点伤害");
         info();
         if (curLife <= 0) {
