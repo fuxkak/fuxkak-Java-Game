@@ -30,7 +30,9 @@ public class Monster {
         }
     }
 
-    public void injured(int attack) {//这里是attack是hunter的attack,不是monster的attack
+    public void injured(Hunter hunter) {//这里是attack是hunter的attack,不是monster的attack
+        //v4.0将(int attack)改为(Hunter hunter)是为了调用hunter的所有属性
+
         /* 定义丢失的基本生命为7(造成的最小伤害值是7)
          * 如果hunter.attack=20;monster.defend=30
          * 那么丢失生命值为monsterLostLife = life-hunter.attack - monster.defend + basicLife = 40-20-30+7=-3
@@ -41,7 +43,7 @@ public class Monster {
         int lostBasicLife = 7;
 
         // 定义失去的生命值(不含7的)
-        int lostLife = attack - defend;
+        int lostLife = hunter.attack - defend;
 
         //定义满血生命值
         int p = life;
@@ -58,8 +60,11 @@ public class Monster {
             dead();
             return;
         }
-        System.out.println(type + "惨叫了一声,受到了"+(p-life)+"点伤害");
+        System.out.println(type + "受到了"+(p-life)+"点伤害");
         show();
+
+        //挨打时自动反击
+        kill(hunter);
     }
 
     public void kill(Hunter hunter) {
@@ -77,12 +82,11 @@ public class Monster {
 
     public void dead() {
         System.out.println(type + "已死亡");
-        //monster死的时候增加hunter经验值
         isLive = false;
     }
 
     public void show() {
-        System.out.println(type + "当前生命值" + life + ",怪物状态:" + isLive +
-                "攻击力:" + attack + ",防御力:" + defend); 
+        System.out.println(type + "当前生命值" +life + ",怪物状态:" + isLive +
+                "攻击力:" + attack + ",防御力:" + defend);
     }
 }

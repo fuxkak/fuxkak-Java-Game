@@ -24,8 +24,9 @@ public class Hunter {
             return;
         }
         System.out.println(name + "挥舞着" + weapon + "杀向了" + monster.type);
-        monster.injured(this.attack);//monster.injured()是指调用monster的injured()方法
+        monster.injured(this);//monster.injured()是指调用monster的injured()方法
         // (this.attack)是指将hunter的attack属性传到monster的injured()方法
+        //v4.0改为(this)是指将hunter的所有属性传到monster的injured()方法
     }
 
     public void injured(int attack) {
@@ -48,7 +49,6 @@ public class Hunter {
         show();
         if (life <= 0) {
             dead();
-            return;
         }
 
 
@@ -60,7 +60,7 @@ public class Hunter {
     }
 
     public void show() {
-        System.out.println("猎人姓名:" + name + ",猎人武器:" + weapon + ",猎人生命值:" +
+        System.out.println("姓名:" + name + ",武器:" + weapon + ",生命值:" +
                 life + ",攻击力:" + attack + ",防御力:" + defend + ",状态:" + isLive);
     }
 }
