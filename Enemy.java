@@ -44,8 +44,6 @@ class Enemy {
     public void dead(Hunter hunter) {
         System.out.println(type + "已死亡");
         isLive = false;
-        //让hunter增加经验值
-        hunter.addExp(this);
     }
 
     public void info() {

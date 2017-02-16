@@ -31,7 +31,7 @@ class Hunter {
         hideRate = 60;
     }
 
-    public void fight(Enemy monster) {
+    public void fight(Monster monster) {
         if (!isLive) {
             return;
         }
@@ -40,6 +40,10 @@ class Hunter {
         }
         System.out.println(name + "挥舞着" + weapon + "杀向了" + monster.type);
         monster.injured(this);
+        //让hunter增加经验值
+        if (!monster.isLive){
+            this.addExp(monster);
+        }
     }
 
     //攻击吸血鬼的方法
@@ -52,6 +56,9 @@ class Hunter {
         }
         System.out.println(name + "挥舞着" + weapon + "杀向了" + vampire.type);
         vampire.injured(this);
+        if (!vampire.isLive){
+            this.addExp(vampire);
+        }
     }
 
 
@@ -137,22 +144,6 @@ class Hunter {
             levelUp();
         }
     }
-
-    //通过Enemy增加的经验值
-    public void addExp(Enemy enemy) {
-        exp += enemy.maxLife;
-        System.out.println(name + "获得了" + enemy.maxLife + "点经验值");
-        //当前经验值>升级所需经验则升级
-        //exp>needExp
-        int needExp = 0;
-        for (int i = 1; i <= level; i++) {
-            needExp += i * 50;
-        }
-        if (exp >= needExp) {
-            levelUp();
-        }
-    }
-
 
     public void levelUp() {
         System.out.println("恭喜升级!");
