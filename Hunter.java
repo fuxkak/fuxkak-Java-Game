@@ -24,18 +24,31 @@ public class Hunter {
             return;
         }
         System.out.println(name + "挥舞着" + weapon + "杀向了" + monster.type);
-        monster.injured();
+        monster.injured(this.attack);//monster.injured()是指调用monster的injured()方法
+        // (this.attack)是指将hunter的attack属性传到monster的injured()方法
     }
 
-    public void injured() {
-        life -= 20;
+    public void injured(int attack) {
+        // 定义丢失的基本生命值
+        int lostBasicLife = 7;
+
+        // 定义失去的生命值(不含7的)
+        int lostLife = attack - defend;
+
+        //增加判断
+        if (attack - defend <= 0) {
+            life -= lostBasicLife;
+        } else {
+            life -= lostLife + lostBasicLife;
+        }
+        System.out.println(name + "受到了伤害");
+        show();
         if (life <= 0) {
             dead();
             return;
         }
 
-        System.out.println(name + "受到了伤害,当前生命值为" + life);
-        show();
+
     }
 
     public void dead() {
@@ -44,6 +57,7 @@ public class Hunter {
     }
 
     public void show() {
-        System.out.println("猎人姓名:" + name + ",猎人武器:" + weapon + ",猎人生命值:" + life + ",状态:" + isLive);
+        System.out.println("猎人姓名:" + name + ",猎人武器:" + weapon + ",猎人生命值:" +
+                life + ",攻击力:" + attack + ",防御力:" + defend + ",状态:" + isLive);
     }
 }
