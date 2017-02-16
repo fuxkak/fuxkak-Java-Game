@@ -43,9 +43,6 @@ public class Monster {
         // 定义失去的生命值(不含7的)
         int lostLife = attack - defend;
 
-        //定义满血生命值
-        int p = life;
-
         //增加判断
         if (attack - defend <= 0) {
             life -= lostBasicLife;
@@ -58,7 +55,7 @@ public class Monster {
             dead();
             return;
         }
-        System.out.println(type + "惨叫了一声,受到了"+(p-life)+"点伤害");
+        System.out.println(type + "惨叫了一声");
         show();
     }
 
@@ -77,12 +74,11 @@ public class Monster {
 
     public void dead() {
         System.out.println(type + "已死亡");
-        //monster死的时候增加hunter经验值
         isLive = false;
     }
 
     public void show() {
         System.out.println(type + "当前生命值" + life + ",怪物状态:" + isLive +
-                "攻击力:" + attack + ",防御力:" + defend); 
+                "攻击力:" + attack + ",防御力:" + defend);
     }
 }
