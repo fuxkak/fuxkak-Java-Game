@@ -35,13 +35,16 @@ public class Hunter {
         // 定义失去的生命值(不含7的)
         int lostLife = attack - defend;
 
+        //定义满血生命值
+        int p = life;
+
         //增加判断
         if (attack - defend <= 0) {
             life -= lostBasicLife;
         } else {
             life -= lostLife + lostBasicLife;
         }
-        System.out.println(name + "受到了伤害");
+        System.out.println(name + "受到了" + (p - life) + "点伤害");
         show();
         if (life <= 0) {
             dead();
