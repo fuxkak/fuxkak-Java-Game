@@ -1,32 +1,38 @@
 class Hunter {
     int curLife;
     int maxLife;
-    int level;
-    int exp;
-    boolean isLive;
     String name;
     String weapon;
+    boolean isLive;
+    int level;
+    int exp;
     int attack;
     int defend;
 
+    //增加敏捷度和躲避几率
+    int agile;//敏捷度
+    //闪躲最大几率
+    int hideRate;
+
     public Hunter(String name, String weapon) {
-        maxLife = 100;
-        curLife = maxLife;
-        isLive = true;
-        attack = 25;
-        defend = 8;
         this.name = name;
         this.weapon = weapon;
+        curLife = 100;
+        maxLife = curLife;
+        isLive = true;
         level = 1;
         exp = 0;
-
+        attack = 25;
+        defend = 7;
+        //为敏捷和闪躲赋值
+        agile = 10;
+        hideRate = 60;
     }
 
     public void fight(Monster monster) {
         if (!isLive) {
             return;
         }
-
         if (!monster.isLive) {
             return;
         }
@@ -34,25 +40,78 @@ class Hunter {
         monster.injured(this);
     }
 
+    //生成任意2个数之间的随机整数
+    public int randomRange(int start, int end) {
+        return ((int) (Math.random() * (end - start) + start));
+    }
+
+    //增加躲避的方法
+    public boolean hidden() {
+        //1.生成一个成功躲避几率(和敏捷相关)
+        int successRate = agile * hideRate / 100;
+
+        //2.生成一个随机数来判断猎人是否躲避成功
+        int ran = randomRange(1, 101);
+
+        //3.判断是否躲避成功(如果随机数小于成功躲避几率,则躲避成功)
+        if (ran < successRate) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public void injured(Monster monster) {
+        //首先判断是否躲避成功,如果躲避成功则直接return,不会受伤
+        if (hidden()) {
+            System.out.println(name + "躲避成功!!!!!!!!!!!!!!!!!!!!!!!");
+            info();
+            return;
+        }
+
         int p = curLife;
         int lostLife = monster.attack - defend;
-        int basicLostLife = 7;
+        int lostBasicLife = 7;
+
         if (lostLife <= 0) {
-            curLife -= basicLostLife;
+            curLife -= lostBasicLife;
         } else {
-            curLife -= basicLostLife + lostLife;
+            curLife -= lostBasicLife + lostLife;
         }
         System.out.println(name + "受到了" + (p - curLife) + "点伤害");
+        info();
         if (curLife <= 0) {
             dead();
         }
-        info();
     }
 
     public void dead() {
         System.out.println(name + "已死亡");
         isLive = false;
+    }
+
+    public void addExp(Monster monster) {
+        exp += monster.maxLife;
+        System.out.println(name + "获得了" + monster.maxLife + "点经验值");
+        //当前经验值>升级所需经验则升级
+        //exp>needExp
+        int needExp = 0;
+        for (int i = 1; i <= level; i++) {
+            needExp += i * 50;
+        }
+        if (exp >= needExp) {
+            levelUp();
+        }
+    }
+
+    public void levelUp() {
+        System.out.println("恭喜升级!");
+        level++;
+        maxLife += 50;
+        curLife = maxLife;
+        attack += 5;
+        defend += 3;
+        info();
     }
 
     public void info() {
@@ -61,35 +120,4 @@ class Hunter {
                 ",防御力:" + defend + ",当前等级:" + level + ",当前经验值:" + exp + ",是否存活:" + isLive);
     }
 
-    //增加经验值
-    public void expAdd(Monster monster) {
-        exp += monster.maxLife;
-        System.out.println(name + "当前经验值为:" + exp);
-        //1 判断是否升级
-        //1.1 获取升级的经验
-        //1级=1*50 2级=1*50+2*50+3*50
-        int needExp=0;
-        for (int i=1;i<=level;i++){
-            needExp+=i*50;
-        }
-
-        //1.2 判断当前经验是否大于升级所需经验
-        if (exp>=needExp){
-            //如果升级,则调用upGrade方法
-            upGrade();
-        }
-
-    }
-
-    //升级
-    public void upGrade(){
-        level+=1;
-        System.out.println(name+"升级了!");
-        //攻击力增加4 防御力增加3 maxLife增加20 curLife=maxLife
-        attack+=4;
-        defend+=3;
-        maxLife+=20;
-        curLife=maxLife;
-        info();
-    }
 }
