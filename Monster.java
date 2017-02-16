@@ -76,7 +76,9 @@ public class Monster {
         }
 
         System.out.println(type + "杀向" + hunter.name);
-        hunter.injured(this.attack);//需要传递僵尸自己的攻击力
+        hunter.injured(this);//需要传递僵尸自己的攻击力
+                                    //v4.1改为(this),意思是传递僵尸自己的所有属性
+                                    //对应的,在hunter的injured()方法里也要做对应的修改
     }
 
 

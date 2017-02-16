@@ -24,17 +24,18 @@ public class Hunter {
             return;
         }
         System.out.println(name + "挥舞着" + weapon + "杀向了" + monster.type);
-        monster.injured(this);//monster.injured()是指调用monster的injured()方法
+        monster.injured(this);//this表示hunter自己这个对象
+        //monster.injured()是指调用monster的injured()方法
         // (this.attack)是指将hunter的attack属性传到monster的injured()方法
         //v4.0改为(this)是指将hunter的所有属性传到monster的injured()方法
     }
 
-    public void injured(int attack) {
+    public void injured(Monster monster) {//v4.1改为Monster monster 意为传递monster对象的所有属性
         // 定义丢失的基本生命值
         int lostBasicLife = 7;
 
         // 定义失去的生命值(不含7的)
-        int lostLife = attack - defend;
+        int lostLife = monster.attack - defend;
 
         //定义满血生命值
         int p = life;
