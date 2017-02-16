@@ -2,6 +2,7 @@ public class GameControl {
     Hunter hunter;
     Monster m1, m2, m3, m4, m5;
     Vampire v1, v2, v3;
+    DarkKnight d1,d2,d3;
 
     public GameControl(Hunter hunter) {
         this.hunter = hunter;
@@ -13,6 +14,9 @@ public class GameControl {
         v1 = new Vampire(1);
         v2 = new Vampire(2);
         v3 = new Vampire(3);
+        d1=new DarkKnight(1);
+        d2=new DarkKnight(2);
+        d3=new DarkKnight(3);
     }
 
     public void start() {
@@ -24,7 +28,7 @@ public class GameControl {
                 break;
             }
 
-            int ran = GameUtil.randomRange(1, 9);
+            int ran = GameUtil.randomRange(1, 12);
             switch (ran) {
                 case 1:
                     hunter.fight(m1);

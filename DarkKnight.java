@@ -1,4 +1,4 @@
-class Vampire {
+class DarkKnight {
     int curLife;
     int maxLife;
     boolean isLive;
@@ -11,10 +11,10 @@ class Vampire {
     // 增加吸血比例的属性
     int getLifeRate;
 
-    public Vampire(int v) {
+    public DarkKnight(int d) {
         isLive = true;
         hideRate = 60;
-        if (v == 1) {
+        if (d == 1) {
             type = "吸血蝙蝠";
             maxLife = 40;
             attack = 25;
@@ -22,14 +22,14 @@ class Vampire {
             minJie = 30;
             getLifeRate = 40;
 
-        } else if (v == 2) {
+        } else if (d == 2) {
             type = "吸血鬼";
             maxLife = 20;
             attack = 30;
             defend = 4;
             minJie = 40;
             getLifeRate = 66;
-        } else if (v == 3) {
+        } else if (d == 3) {
             type = "吸血鬼王";
             maxLife = 60;
             attack = 20;

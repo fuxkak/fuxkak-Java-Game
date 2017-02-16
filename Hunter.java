@@ -52,6 +52,18 @@ class Hunter {
         vampire.injured(this);
     }
 
+    //攻击黑暗骑士的方法
+    public void fight(DarkKnight darkKnight) {
+        if (!isLive) {
+            return;
+        }
+        if (!darkKnight.isLive) {
+            return;
+        }
+        System.out.println(name + "挥舞着" + weapon + "杀向了" + darkKnight.type);
+        darkKnight.injured(this);
+    }
+
 
     //躲避的方法
     public boolean hidden() {
@@ -79,25 +91,47 @@ class Hunter {
     }
 
     //vampire的受伤方法
-    public void injured(Vampire vampire) {
+    public int injured(Vampire vampire) {
         //首先判断是否躲避成功,如果躲避成功则直接return,不会受伤
         if (hidden()) {
             System.out.println(name + "躲避成功!!!!!!!!!!!!!!!!!!!!!!!");
             info();
-            return;
+            return 0;
         }
 
         //获取丢失的生命值
         int p = curLife;
         int lostLife = GameUtil.calLostLife(vampire.attack, defend);
-        //bloodSuck方法用来获取应该吸取的血量
-        vampire.bloodSuck(lostLife);
+
         curLife -= lostLife;
         System.out.println(name + "受到了" + (p - curLife) + "点伤害");
         info();
         if (curLife <= 0) {
             dead();
         }
+        return lostLife;
+    }
+
+    //DarkKnight的受伤方法
+    public int injured(DarkKnight darkKnight) {
+        //首先判断是否躲避成功,如果躲避成功则直接return,不会受伤
+        if (hidden()) {
+            System.out.println(name + "躲避成功!!!!!!!!!!!!!!!!!!!!!!!");
+            info();
+            return 0;
+        }
+
+        //获取丢失的生命值
+        int p = curLife;
+        int lostLife = GameUtil.calLostLife(darkKnight.attack, defend);
+
+        curLife -= lostLife;
+        System.out.println(name + "受到了" + (p - curLife) + "点伤害");
+        info();
+        if (curLife <= 0) {
+            dead();
+        }
+        return lostLife;
     }
 
     public void dead() {
@@ -124,6 +158,21 @@ class Hunter {
     public void addExp(Vampire vampire) {
         exp += vampire.maxLife;
         System.out.println(name + "获得了" + vampire.maxLife + "点经验值");
+        //当前经验值>升级所需经验则升级
+        //exp>needExp
+        int needExp = 0;
+        for (int i = 1; i <= level; i++) {
+            needExp += i * 50;
+        }
+        if (exp >= needExp) {
+            levelUp();
+        }
+    }
+
+    //通过黑暗骑士增加的经验值
+    public void addExp(DarkKnight darkKnight) {
+        exp += darkKnight.maxLife;
+        System.out.println(name + "获得了" + darkKnight.maxLife + "点经验值");
         //当前经验值>升级所需经验则升级
         //exp>needExp
         int needExp = 0;
